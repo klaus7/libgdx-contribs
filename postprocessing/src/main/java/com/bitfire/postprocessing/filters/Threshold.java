@@ -53,8 +53,8 @@ public final class Threshold extends Filter<Threshold> {
 
 	public void setTreshold (float gamma) {
 		this.gamma = gamma;
-		setParams(Param.Threshold, gamma);
-		setParams(Param.ThresholdInvTx, 1f / (1 - gamma)).endParams();
+//		setParams(Param.Threshold, gamma);
+		//(Param.ThresholdInvTx, 1f / (1 - gamma)).endParams();
 	}
 
 	public float getThreshold () {

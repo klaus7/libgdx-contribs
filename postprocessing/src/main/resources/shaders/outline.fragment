@@ -1,0 +1,31 @@
+#ifdef GL_ES
+precision mediump float;
+precision mediump int;
+#endif
+
+uniform sampler2D u_texture0;
+
+// The inverse of the viewport dimensions along X and Y
+uniform vec2 u_viewportInverse;
+
+varying vec2 v_texCoords;
+
+#define OFFSET 1.0
+
+
+vec4 outline(sampler2D texture, vec2 texCoords, vec2 viewportInv) {
+	float rgbNW = texture2D(texture, texCoords.xy + (vec2(-OFFSET, -OFFSET) * viewportInv)).a;
+	float rgbNE = texture2D(texture, texCoords.xy + (vec2(+OFFSET, -OFFSET) * viewportInv)).a;
+	float rgbSW = texture2D(texture, texCoords.xy + (vec2(-OFFSET, +OFFSET) * viewportInv)).a;
+	float rgbSE = texture2D(texture, texCoords.xy + (vec2(+OFFSET, +OFFSET) * viewportInv)).a;
+	float rgbM  = texture2D(texture, texCoords.xy).a;
+
+	float alpha = max((rgbNW), max((rgbNE), max((rgbSW), max((rgbSE), (rgbM)))));
+
+	return vec4(1,1,1,alpha);
+}
+
+void main() {
+	gl_FragColor = outline(u_texture0, v_texCoords, u_viewportInverse);
+	//gl_FragColor = vec4(texture2D(u_texture0, v_texCoords.xy +(vec2(-OFFSET, -OFFSET) * u_viewportInverse)).xy,1 ,0.1);
+}
